@@ -21,7 +21,7 @@
     "url": "https://github.com/thackerronak/SmartEthereumWallet/issues"
   },
   "engines": {
-    "node": ">=4.2.4"
+    "node": ">=6.9.0"
   },
   "homepage": "https://github.com/thackerronak/SmartEthereumWallet#readme",
   "devDependencies": {
