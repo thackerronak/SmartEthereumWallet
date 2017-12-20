@@ -2,10 +2,10 @@
  * Created by smartSense on 19/12/17.
  */
 'use strict';
-var currentDir = __dirname;
+
 var Web3 = require('web3');
 var web3;
-var WalletController = require(currentDir + '/Controller/WalletController');
+var WalletController = require('./Controller/WalletController');
 
 var SmartEthereumWallet = function SmartEthereumWallet(url) {
     var _this = this;
