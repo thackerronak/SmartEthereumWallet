@@ -24,8 +24,12 @@ var SmartEthereumWallet = require('smartethereumwallet');
 
 - Initalizing the library 
 
+
+[Register](https://infura.io/register.html) for an INFURA TM Access Token.
+
 ```js
-var smartEthereumWallet = new SmartEthereumWallet('https://kovan.infura.io/kixyOXvZF8wkkqqryELG');
+
+var smartEthereumWallet = new SmartEthereumWallet('https://mainnet.infura.io/{{YOUR TOKEN}}');
 var walletController = smartEthereumWallet.WalletController;
 ```
 
