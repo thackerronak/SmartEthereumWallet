@@ -1,6 +1,6 @@
 {
   "name": "smartethereumwallet",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Ethereum Wallet and Contract Integration ",
   "main": "index.js",
   "scripts": {
@@ -19,6 +19,9 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/thackerronak/SmartEthereumWallet/issues"
+  },
+  "engines": {
+    "node": ">=4.2.4"
   },
   "homepage": "https://github.com/thackerronak/SmartEthereumWallet#readme",
   "devDependencies": {
