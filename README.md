@@ -2,7 +2,7 @@
 Ethereum Wallet and Contract Integration
 
 
-<!-- [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] -->
+[![npm version](https://badge.fury.io/js/smartethereumwallet.svg)](https://badge.fury.io/js/smartethereumwallet)
 
 
 ## Installation
