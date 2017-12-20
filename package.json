@@ -1,0 +1,29 @@
+{
+  "name": "smartethereumwallet",
+  "version": "1.0.0",
+  "description": "Ethereum Wallet and Contract Integration ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thackerronak/SmartEthereumWallet.git"
+  },
+  "keywords": [
+    "ethereum",
+    "smartcontract",
+    "wallet"
+  ],
+  "author": "smartSense Consulting Solutions Pvt. Ltd",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thackerronak/SmartEthereumWallet/issues"
+  },
+  "homepage": "https://github.com/thackerronak/SmartEthereumWallet#readme",
+  "devDependencies": {
+    "async": "^2.6.0",
+    "ethereumjs-tx": "^1.3.3",
+    "web3": "^1.0.0-beta.26"
+  }
+}
