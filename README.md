@@ -1,8 +1,7 @@
 # SmartEthereumWallet
 Ethereum Wallet and Contract Integration
 
-
-[![npm version](https://badge.fury.io/js/smartethereumwallet.svg)](https://badge.fury.io/js/smartethereumwallet)
+[![NPM](https://nodei.co/npm/smartethereumwallet.png?compact=true)](https://nodei.co/npm/smartethereumwallet/) [![npm version](https://badge.fury.io/js/smartethereumwallet.svg)](https://badge.fury.io/js/smartethereumwallet)
 
 
 ## Installation
@@ -28,10 +27,10 @@ var SmartEthereumWallet = require('smartethereumwallet');
 [Register](https://infura.io/register.html) for an INFURA TM Access Token.
 
 ```js
-
 var smartEthereumWallet = new SmartEthereumWallet('https://mainnet.infura.io/{{YOUR TOKEN}}');
 var walletController = smartEthereumWallet.WalletController;
 ```
+
 
 - Create Ethereum Wallet/Account 
 
@@ -44,7 +43,6 @@ walletController.createEthereumWallet(function (err, wallet) {
     }
 });
 ```
-
 
 
 - Encrypt the private key, to get the encrypted web3 keystore v3 JSON
@@ -62,6 +60,7 @@ walletController.encryptWallet(walletPrivateKey, userPassword, function (err, ke
     }
 });
 ```
+
 
 - Decrypt a keystore v3 JSON, and get the wallet/private key back
 
@@ -120,6 +119,21 @@ walletController.checkAccountBalance(walletAddress, function (err, balance) {
 ```
 
 
+- Get estimation for transaction
+
+```js
+var walletAddress = '0x4731F8558896766E67f0b552b9f434aEA3a301f6';
+var destinationAddress = '0x1750c3F8ce7b30e6B89d7F1b017b28e64791e0AE';
+walletController.getTransactionPriceAndEstimation(walletAddress, destinationAddress, function (err, estimate) {
+    if (err) {
+        console.log("Error in getTransactionPriceAndEstimation", err);
+    } else {
+        console.log("Success in getTransactionPriceAndEstimation", estimate);
+    }
+});
+```
+
+
 - Send Ether to another wallet
 
 ```js
@@ -137,16 +151,3 @@ walletController.etherTransfer(walletAddress, walletPrivateKey, destinationAddre
 ```
 
 
-- Get estimation for transaction
-
-```js
-var walletAddress = '0x4731F8558896766E67f0b552b9f434aEA3a301f6';
-var destinationAddress = '0x1750c3F8ce7b30e6B89d7F1b017b28e64791e0AE';
-walletController.getTransactionPriceAndEstimation(walletAddress, destinationAddress, function (err, estimate) {
-    if (err) {
-        console.log("Error in getTransactionPriceAndEstimation", err);
-    } else {
-        console.log("Success in getTransactionPriceAndEstimation", estimate);
-    }
-});
-```

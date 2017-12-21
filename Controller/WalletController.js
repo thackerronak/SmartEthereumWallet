@@ -20,6 +20,7 @@ var signTransaction = function (address, destinationAddress, returnCheck, transf
         gasEstimate: web3.eth.estimateGas.bind(web3.eth, gasObj),
         balance: module.exports.checkAccountBalance.bind(module.exports.checkAccountBalance, address)
     }, function (err, results) {
+        // console.log(results);
         if (err) {
             return callback(err, null);
         } else {
@@ -38,7 +39,7 @@ var signTransaction = function (address, destinationAddress, returnCheck, transf
 
 var sendTransaction = function (results, callback) {
     try {
-        if (web3.utils.toWei(results.balance, 'ether') < (results.gasEstimate * results.gasPrice)) {
+        if (web3.utils.toWei(results.balance, 'ether') < (results.transferValue + (results.gasEstimate * results.gasPrice))) {
             return callback('low balance', null);
         } else {
             var tx = new Tx({
