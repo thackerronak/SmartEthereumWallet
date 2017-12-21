@@ -1,7 +1,7 @@
-# SmartEthereumWallet
+# SmartEthereumWallet [![Build Status][travis-image]][travis-url]
 Ethereum Wallet and Contract Integration
 
-[![NPM](https://nodei.co/npm/smartethereumwallet.png?compact=true)](https://nodei.co/npm/smartethereumwallet/) [![npm version](https://badge.fury.io/js/smartethereumwallet.svg)](https://badge.fury.io/js/smartethereumwallet)
+[![npm version](https://badge.fury.io/js/smartethereumwallet.svg)](https://badge.fury.io/js/smartethereumwallet)
 
 
 ## Installation
@@ -150,4 +150,5 @@ walletController.etherTransfer(walletAddress, walletPrivateKey, destinationAddre
 });
 ```
 
-
+[travis-image]: https://travis-ci.org/thackerronak/SmartEthereumWallet.svg
+[travis-url]: https://travis-ci.org/thackerronak/SmartEthereumWallet
