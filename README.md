@@ -137,15 +137,34 @@ walletController.getTransactionPriceAndEstimation(walletAddress, destinationAddr
 - Send Ether to another wallet
 
 ```js
-var walletAddress = '0x4731F8558896766E67f0b552b9f434aEA3a301f6';
-var walletPrivateKey = '22c8445afef08d2bbd15ff5362bdd6ae69623255c9f4dd0d29c316ee0754c222';
-var destinationAddress = '0x1750c3F8ce7b30e6B89d7F1b017b28e64791e0AE';
-var value = '0.01';//(Ether)
-walletController.etherTransfer(walletAddress, walletPrivateKey, destinationAddress, value, function (err, txHash) {
+var params = {
+    address: '0x4731F8558896766E67f0b552b9f434aEA3a301f6',
+    privateKey: '22c8445afef08d2bbd15ff5362bdd6ae69623255c9f4dd0d29c316ee0754c222',
+    destinationAddress: '0x1750c3F8ce7b30e6B89d7F1b017b28e64791e0AE',
+    value: '0.01',
+    nonce: 11,
+    gasPrice: '20000000000',
+    gasEstimate: 21000,
+    balance: '0.471194840734643'
+};
+walletController.etherTransfer(params, function (err, txHash) {
     if (err) {
         console.log("Error in etherTransfer", err);
     } else {
         console.log("Success in etherTransfer", txHash);
+    }
+});
+```
+
+- Get Transaction Receipt
+
+```js
+var transactionHash = '0xc2e7ea59672002c6936e168c20029211cfe77ce87c2e4a40f1debc8480e589a8';
+walletController.getTransactionReceipt(transactionHash, function (err, hash) {
+    if (err) {
+        console.log("Error in getTransactionReceipt", err);
+    } else {
+        console.log("Success in getTransactionReceipt", hash);
     }
 });
 ```

@@ -122,15 +122,29 @@ WalletController.prototype.getTransactionPriceAndEstimation = function (address,
 
 WalletController.prototype.etherTransfer = function (params, callback) {
     try {
-        if(params.hasOwnProperty('address') && params.hasOwnProperty('privateKey') && params.hasOwnProperty('destinationAddress') && params.hasOwnProperty('value') && params.hasOwnProperty('nonce') && params.hasOwnProperty('gasPrice') && params.hasOwnProperty('gasEstimate') && params.hasOwnProperty('balance')){
+        if (params.hasOwnProperty('address') && params.hasOwnProperty('privateKey') && params.hasOwnProperty('destinationAddress') && params.hasOwnProperty('value') && params.hasOwnProperty('nonce') && params.hasOwnProperty('gasPrice') && params.hasOwnProperty('gasEstimate') && params.hasOwnProperty('balance')) {
             params.transferValue = web3.utils.toWei(params.value, 'ether');
             sendTransaction(params, callback);
-        } else{
+        } else {
             return callback('please add required params', null);
         }
     } catch (e) {
         return callback(e, null);
     }
 };
+
+WalletController.prototype.getTransactionReceipt = function (txHash, callback) {
+    try {
+        web3.eth.getTransactionReceipt(txHash, function (err, res) {
+            if (err) {
+                return callback(err, null);
+            } else
+                callback(null, res);
+        });
+    } catch (e) {
+        return callback(e, null);
+    }
+};
+
 
 module.exports = new WalletController();
