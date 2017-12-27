@@ -9,7 +9,7 @@ var web3;
 var WalletController = function () {
 };
 
-var signTransaction = function (address, destinationAddress, returnCheck, transferValue, privateKey, callback) {
+var getEstimation = function (address, destinationAddress, callback) {
     var gasObj = {
         to: destinationAddress,
         from: address
@@ -20,19 +20,12 @@ var signTransaction = function (address, destinationAddress, returnCheck, transf
         gasEstimate: web3.eth.estimateGas.bind(web3.eth, gasObj),
         balance: module.exports.checkAccountBalance.bind(module.exports.checkAccountBalance, address)
     }, function (err, results) {
-        // console.log(results);
+        console.log(results);
         if (err) {
             return callback(err, null);
         } else {
-            if (returnCheck) {
-                results.totalEstimateCost = (results.gasEstimate * results.gasPrice);
-                return callback(err, results);
-            } else {
-                results.destinationAddress = destinationAddress;
-                results.transferValue = transferValue;
-                results.privateKey = privateKey;
-                sendTransaction(results, callback);
-            }
+            results.totalEstimateCost = (results.gasEstimate * results.gasPrice);
+            return callback(err, results);
         }
     });
 };
@@ -119,18 +112,22 @@ WalletController.prototype.checkEthereumAddress = function (address, callback) {
     }
 };
 
-WalletController.prototype.etherTransfer = function (address, privateKey, destinationAddress, value, callback) {
+WalletController.prototype.getTransactionPriceAndEstimation = function (address, destinationAddress, callback) {
     try {
-        var transferValue = web3.utils.toWei(value, 'ether');
-        signTransaction(address, destinationAddress, false, transferValue, privateKey, callback);
+        getEstimation(address, destinationAddress, callback);
     } catch (e) {
         return callback(e, null);
     }
 };
 
-WalletController.prototype.getTransactionPriceAndEstimation = function (address, destinationAddress, callback) {
+WalletController.prototype.etherTransfer = function (params, callback) {
     try {
-        signTransaction(address, destinationAddress, true, 0, '', callback);
+        if(params.hasOwnProperty('address') && params.hasOwnProperty('privateKey') && params.hasOwnProperty('destinationAddress') && params.hasOwnProperty('value') && params.hasOwnProperty('nonce') && params.hasOwnProperty('gasPrice') && params.hasOwnProperty('gasEstimate') && params.hasOwnProperty('balance')){
+            params.transferValue = web3.utils.toWei(params.value, 'ether');
+            sendTransaction(params, callback);
+        } else{
+            return callback('please add required params', null);
+        }
     } catch (e) {
         return callback(e, null);
     }
