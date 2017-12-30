@@ -22,7 +22,8 @@ MultiSigController.prototype.Init = function (_web3, contractAddress) {
     contractObj = new web3.eth.Contract(CONTRACT_ABI, contractAddress);
 };
 
-var createSignatures = function (privateKeys, multiSigContractAddress, nonce, destinationAddress, tokenAddress) {
+var createSignatures = function (privateKeys, multiSigContractAddress, nonce, destinationAddress, tokenAddress, callback) {
+    // console.log("createSignatures---", privateKeys, multiSigContractAddress, nonce, destinationAddress, tokenAddress);
     try {
         let input = '0x19' + '00' + multiSigContractAddress.slice(2) + destinationAddress.slice(2) + leftPad(nonce.toString('16'), '64', '0') + leftPad((new BigNumber(Number(tokenAddress))).toString('16'), '2', '0');
         let hash = web3.utils.sha3(input)
@@ -38,10 +39,10 @@ var createSignatures = function (privateKeys, multiSigContractAddress, nonce, de
             sigS.push('0x' + sig.s.toString('hex'))
         }
 
-        return (null,{sigV: sigV, sigR: sigR, sigS: sigS});
+        return callback(null,{sigV: sigV, sigR: sigR, sigS: sigS});
     } catch (e) {
         // console.log(e);
-        return (e, null);
+        return callback(e, null);
     }
 };
 
@@ -93,6 +94,7 @@ MultiSigController.prototype.etherTokenTransfer = function (walletAddress, priva
         async.series([
             function (callback) {
                 contractObj.methods.nonce().call(function (err, result) {
+                    // console.log("Result---", result);
                     if (err) {
                         return callback(err, null);
                     } else {
@@ -103,10 +105,18 @@ MultiSigController.prototype.etherTokenTransfer = function (walletAddress, priva
             },
             function (callback) {
                 var hasTokenAddress = tokenAddress ? true : false;
-                return callback(null,createSignatures(privateKeys, contractObj.options.address, nonce, destinationAddress, hasTokenAddress))
+                createSignatures(privateKeys, contractObj.options.address, nonce, destinationAddress, hasTokenAddress,function (err, result) {
+                    // console.log("Result---", result);
+                    if (err) {
+                        return callback(err, null);
+                    } else {
+                        return callback(null, result);
+                    }
+                })
+
             }
         ], function (err, results) {
-            // console.log("---", results);
+            // console.log("Results---", results);
             if (err) {
                 return mainCallback(err, null);
             } else {
