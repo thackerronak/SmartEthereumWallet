@@ -96,7 +96,7 @@ MultiSigController.prototype.etherTokenTransfer = function (walletAddress, priva
                     if (err) {
                         return callback(err, null);
                     } else {
-                        nonce = result;
+                        nonce = Number(result);
                         return callback(null, result);
                     }
                 });
