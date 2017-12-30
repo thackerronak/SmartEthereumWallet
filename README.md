@@ -169,6 +169,8 @@ walletController.getTransactionReceipt(transactionHash, function (err, hash) {
 });
 ```
 
+- Initialize MultiSigController
+
 
 ```js
 var smartEthereumWallet = new SmartEthereumWallet('https://mainnet.infura.io/{{YOUR TOKEN}}');
