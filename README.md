@@ -3,6 +3,12 @@ Ethereum Wallet and Contract Integration
 
 [![NPM](https://nodei.co/npm/smartethereumwallet.png?compact=true)](https://nodei.co/npm/smartethereumwallet/) [![npm version](https://badge.fury.io/js/smartethereumwallet.svg)](https://badge.fury.io/js/smartethereumwallet)
 
+### Updates
+
+```bash
+0.2.0 - MultiSig Wallet Support
+0.1.0 - Wallet Support
+```
 
 ## Installation
 
@@ -137,17 +143,11 @@ walletController.getTransactionPriceAndEstimation(walletAddress, destinationAddr
 - Send Ether to another wallet
 
 ```js
-var params = {
-    address: '0x4731F8558896766E67f0b552b9f434aEA3a301f6',
-    privateKey: '22c8445afef08d2bbd15ff5362bdd6ae69623255c9f4dd0d29c316ee0754c222',
-    destinationAddress: '0x1750c3F8ce7b30e6B89d7F1b017b28e64791e0AE',
-    value: '0.01',
-    nonce: 11,
-    gasPrice: '20000000000',
-    gasEstimate: 21000,
-    balance: '0.471194840734643'
-};
-walletController.etherTransfer(params, function (err, txHash) {
+var walletAddress = '0x4731F8558896766E67f0b552b9f434aEA3a301f6';
+var privateKey = '22c8445afef08d2bbd15ff5362bdd6ae69623255c9f4dd0d29c316ee0754c222';
+var destinationAddress = '0x1750c3F8ce7b30e6B89d7F1b017b28e64791e0AE';
+var value = '0.01';
+walletController.etherTransfer(walletAddress, privateKey, destinationAddress, value, function (err, txHash) {
     if (err) {
         console.log("Error in etherTransfer", err);
     } else {
@@ -170,3 +170,28 @@ walletController.getTransactionReceipt(transactionHash, function (err, hash) {
 ```
 
 
+```js
+var smartEthereumWallet = new SmartEthereumWallet('https://mainnet.infura.io/{{YOUR TOKEN}}');
+var CONTRACT_ADDRESS = '{{CONTRACT ADDRESS}}';
+var multiSigController = smartEthereumWallet.MultiSigController(CONTRACT_ADDRESS);
+```
+
+
+
+- Ether Token Transfer
+
+```js
+var walletAddress = '{{ADDRESS}}';
+var privateKeys = ['{{PRIVATE KEY 1}}', '{{PRIVATE KEY 2}}'];
+var destinationAddress = '{{DESTINATION ADDRESS}}';
+var value = '{{VALUE}}'; (Ether/Token)
+var tokenContractAddress = '{{TOKEN ADDRESS}}'; (if you want pass ether then put empty '')
+
+multiSigController.etherTokenTransfer(walletAddress, privateKeys, destinationAddress, value, tokenContractAddress, function (err, txHash) {
+    if (err) {
+        console.log("Error in etherTokenTransfer", err);
+    } else {
+        console.log("Success in etherTokenTransfer", txHash);
+    }
+});
+```

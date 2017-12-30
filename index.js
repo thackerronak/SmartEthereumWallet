@@ -14,9 +14,9 @@ var SmartEthereumWallet = function SmartEthereumWallet(url) {
     WalletController.Init(web3);
     this.WalletController = WalletController;
 
-    // Initialize MultiSigController with given contractABI & contractAddress
-    this.MultiSigController = function (contractABI, contractAddress) {
-        MultiSigController.Init(web3,contractABI,contractAddress);
+    // Initialize MultiSigController with given contractAddress
+    this.MultiSigController = function (contractAddress) {
+        MultiSigController.Init(web3,contractAddress);
         return MultiSigController;
     };
 

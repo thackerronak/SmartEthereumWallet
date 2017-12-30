@@ -80,13 +80,15 @@ describe('Wallet', function () {
     });
 
 
+
+
     var privateKey = '22c8445afef08d2bbd15ff5362bdd6ae69623255c9f4dd0d29c316ee0754c222';
-    var value = '0.001';//(Ether)
+    var destinationAddress = '0x1750c3F8ce7b30e6B89d7F1b017b28e64791e0AE';
+    var value = '0.01';
 
     describe('EtherTransfer', function () {
         it('etherTransfer() must return Transaction Hash', function (done) {
-            walletController.etherTransfer(address, privateKey, walletAddress, value, function (err, txHash) {
-            // walletController.etherTransfer(walletAddress, walletPrivateKey, address, value, function (err, txHash) {
+            walletController.etherTransfer(address, privateKey, destinationAddress, value, function (err, txHash) {
                 if (err) done(err);
                 else {
                     expect(txHash).to.be.not.null;
@@ -96,4 +98,42 @@ describe('Wallet', function () {
         });
     });
 
+    var transactionHash = '0xc2e7ea59672002c6936e168c20029211cfe77ce87c2e4a40f1debc8480e589a8';
+    describe('TransactionReceipt', function () {
+        it('getTransactionReceipt() must return info', function (done) {
+            walletController.getTransactionReceipt(transactionHash, function (err, info) {
+                if (err) done(err);
+                else {
+                    expect(info).to.be.not.null;
+                    done();
+                }
+            });
+        });
+    });
+
+});
+
+
+var CONTRACT_ADDRESS = '0xa000d988836633ce4cd43158884660e9155230d1';
+describe('MultiSig', function () {
+
+    var multiSigController = smartEthereumWallet.MultiSigController(CONTRACT_ADDRESS);
+
+    var walletAddress = '0xCCDDCcdeBd0C15590b33b41c40F3361f764fd07c';
+    var privateKeys = ['d6031505b3b45dd1be7d72486dec0b7f95eee2db329fc28a1a3b3a09904a7806', 'f521491660b385f0f6ecb0266df4648d57016b7c455e04f77378c36ab7cfaf6c'];
+    var destinationAddress = '0x8374D21710cE53a13686aabd67ee13d4b27D1933';
+    var value = '0.01';
+    var tokenContractAddress = '';
+
+    describe('Ether Token Transfer', function () {
+        it('etherTokenTransfer() must return transaction hash', function (done) {
+            multiSigController.etherTokenTransfer(walletAddress, privateKeys, destinationAddress, value, tokenContractAddress, function (err, txHash) {
+                if (err) done(err);
+                else {
+                    expect(txHash).to.be.not.null;
+                    done();
+                }
+            });
+        });
+    });
 });
