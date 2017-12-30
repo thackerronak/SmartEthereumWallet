@@ -3,6 +3,12 @@ Ethereum Wallet and Contract Integration
 
 [![npm version](https://badge.fury.io/js/smartethereumwallet.svg)](https://badge.fury.io/js/smartethereumwallet)
 
+### Updates
+
+```bash
+0.2.0 - MultiSig Wallet Support
+0.1.0 - Wallet Support
+```
 
 ## Installation
 
@@ -24,7 +30,7 @@ var SmartEthereumWallet = require('smartethereumwallet');
 - Initalizing the library 
 
 
-[Register](https://infura.io/register.html) for an INFURA TM Access Token.
+[Register](https://infura.io/signup) for an INFURA TM Access Token.
 
 ```js
 var smartEthereumWallet = new SmartEthereumWallet('https://mainnet.infura.io/{{YOUR TOKEN}}');
@@ -150,5 +156,44 @@ walletController.etherTransfer(walletAddress, walletPrivateKey, destinationAddre
 });
 ```
 
+- Get Transaction Receipt
+
+```js
+var transactionHash = '0xc2e7ea59672002c6936e168c20029211cfe77ce87c2e4a40f1debc8480e589a8';
+walletController.getTransactionReceipt(transactionHash, function (err, hash) {
+    if (err) {
+        console.log("Error in getTransactionReceipt", err);
+    } else {
+        console.log("Success in getTransactionReceipt", hash);
+    }
+});
+```
+
+
+```js
+var smartEthereumWallet = new SmartEthereumWallet('https://mainnet.infura.io/{{YOUR TOKEN}}');
+var CONTRACT_ADDRESS = '{{CONTRACT ADDRESS}}';
+var multiSigController = smartEthereumWallet.MultiSigController(CONTRACT_ADDRESS);
+```
+
+
+
+- Ether Token Transfer
+
+```js
+var walletAddress = '{{ADDRESS}}';
+var privateKeys = ['{{PRIVATE KEY 1}}', '{{PRIVATE KEY 2}}'];
+var destinationAddress = '{{DESTINATION ADDRESS}}';
+var value = '{{VALUE}}'; (Ether/Token)
+var tokenContractAddress = '{{TOKEN ADDRESS}}'; (if you want pass ether then put empty '')
+
+multiSigController.etherTokenTransfer(walletAddress, privateKeys, destinationAddress, value, tokenContractAddress, function (err, txHash) {
+    if (err) {
+        console.log("Error in etherTokenTransfer", err);
+    } else {
+        console.log("Success in etherTokenTransfer", txHash);
+    }
+});
+```
 [travis-image]: https://travis-ci.org/thackerronak/SmartEthereumWallet.svg
 [travis-url]: https://travis-ci.org/thackerronak/SmartEthereumWallet

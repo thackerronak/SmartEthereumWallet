@@ -9,58 +9,61 @@ var web3;
 var WalletController = function () {
 };
 
-var signTransaction = function (address, destinationAddress, returnCheck, transferValue, privateKey, callback) {
-    var gasObj = {
-        to: destinationAddress,
-        from: address
-    };
-    async.parallel({
-        nonce: web3.eth.getTransactionCount.bind(web3.eth, address),
-        gasPrice: web3.eth.getGasPrice.bind(web3.eth),
-        gasEstimate: web3.eth.estimateGas.bind(web3.eth, gasObj),
-        balance: module.exports.checkAccountBalance.bind(module.exports.checkAccountBalance, address)
-    }, function (err, results) {
-        // console.log(results);
-        if (err) {
-            return callback(err, null);
-        } else {
-            if (returnCheck) {
-                results.totalEstimateCost = (results.gasEstimate * results.gasPrice);
-                return callback(err, results);
-            } else {
-                results.destinationAddress = destinationAddress;
-                results.transferValue = transferValue;
-                results.privateKey = privateKey;
-                sendTransaction(results, callback);
-            }
-        }
-    });
-};
-
-var sendTransaction = function (results, callback) {
+var getEstimation = function (address, destinationAddress, callback) {
     try {
-        if (web3.utils.toWei(results.balance, 'ether') < (results.transferValue + (results.gasEstimate * results.gasPrice))) {
-            return callback('low balance', null);
-        } else {
-            var tx = new Tx({
-                to: results.destinationAddress,
-                nonce: results.nonce,
-                gasPrice: web3.utils.toHex(results.gasPrice),
-                gasLimit: web3.utils.toHex(results.gasEstimate),
-                value: web3.utils.toHex(results.transferValue)
-            });
-            tx.sign(new Buffer(results.privateKey, 'hex'));
-            web3.eth.sendSignedTransaction('0x' + tx.serialize().toString('hex'), function (err, response) {
-                if (err) {
-                    return callback(err, null);
-                } else
-                    return callback(null, response);
-            });
-        }
+        var gasObj = {
+            to: destinationAddress,
+            from: address
+        };
+        async.parallel({
+            nonce: web3.eth.getTransactionCount.bind(web3.eth, address),
+            gasPrice: web3.eth.getGasPrice.bind(web3.eth),
+            gasEstimate: web3.eth.estimateGas.bind(web3.eth, gasObj),
+            balance: web3.eth.getBalance.bind(web3.eth, address)
+        }, function (err, results) {
+            // console.log(results);
+            if (err) {
+                return callback(err, null);
+            } else {
+                results.balance = web3.utils.fromWei(results.balance, 'ether');
+                results.totalEstimateCost = (results.gasEstimate * results.gasPrice);
+                return callback(null, results);
+            }
+        });
     } catch (e) {
         return callback(e, null);
     }
-}
+};
+
+var sendTransaction = function (address, walletPrivateKey, destinationAddress, transferValue, callback) {
+    try {
+        getEstimation(address, destinationAddress, function (err, results) {
+            // console.log(results);
+            if (err)
+                return callback(err, null);
+            else if (web3.utils.toWei(results.balance, 'ether') < (transferValue + (results.gasEstimate * results.gasPrice))) {
+                return callback('low balance', null);
+            } else {
+                var tx = new Tx({
+                    to: results.destinationAddress,
+                    nonce: results.nonce,
+                    gasPrice: web3.utils.toHex(results.gasPrice),
+                    gasLimit: web3.utils.toHex(53000),//results.gasEstimate
+                    value: web3.utils.toHex(transferValue)
+                });
+                tx.sign(new Buffer(walletPrivateKey, 'hex'));
+                web3.eth.sendSignedTransaction('0x' + tx.serialize().toString('hex'), function (err, response) {
+                    if (err) {
+                        return callback(err, null);
+                    } else
+                        return callback(null, response);
+                });
+            }
+        });
+    } catch (e) {
+        return callback(e, null);
+    }
+};
 
 WalletController.prototype.Init = function (_web3) {
     web3 = _web3;
@@ -119,21 +122,35 @@ WalletController.prototype.checkEthereumAddress = function (address, callback) {
     }
 };
 
-WalletController.prototype.etherTransfer = function (address, privateKey, destinationAddress, value, callback) {
+WalletController.prototype.getTransactionPriceAndEstimation = function (address, destinationAddress, callback) {
     try {
-        var transferValue = web3.utils.toWei(value, 'ether');
-        signTransaction(address, destinationAddress, false, transferValue, privateKey, callback);
+        getEstimation(address, destinationAddress, callback);
     } catch (e) {
         return callback(e, null);
     }
 };
 
-WalletController.prototype.getTransactionPriceAndEstimation = function (address, destinationAddress, callback) {
+WalletController.prototype.etherTransfer = function (address, walletPrivateKey, destinationAddress, value, callback) {
     try {
-        signTransaction(address, destinationAddress, true, 0, '', callback);
+        var transferValue = web3.utils.toWei(value, 'ether');
+        sendTransaction(address, walletPrivateKey, destinationAddress, transferValue, callback);
     } catch (e) {
         return callback(e, null);
     }
 };
+
+WalletController.prototype.getTransactionReceipt = function (txHash, callback) {
+    try {
+        web3.eth.getTransactionReceipt(txHash, function (err, res) {
+            if (err) {
+                return callback(err, null);
+            } else
+                callback(null, res);
+        });
+    } catch (e) {
+        return callback(e, null);
+    }
+};
+
 
 module.exports = new WalletController();
