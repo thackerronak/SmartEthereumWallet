@@ -6,6 +6,7 @@ Ethereum Wallet and Contract Integration
 ### Updates
 
 ```bash
+0.3.0 - Coin Support
 0.2.0 - MultiSig Wallet Support
 0.1.0 - Wallet Support
 ```
@@ -197,5 +198,89 @@ multiSigController.etherTokenTransfer(walletAddress, privateKeys, destinationAdd
     }
 });
 ```
+
+
+
+- Initialize CoinController
+
+
+```js
+var smartEthereumWallet = new SmartEthereumWallet('https://mainnet.infura.io/{{YOUR TOKEN}}');
+var CONTRACT_ADDRESS = '{{CONTRACT ADDRESS}}';
+var coinController = smartEthereumWallet.CoinController(CONTRACT_ADDRESS);
+```
+
+
+- Get Token Transfer Stage
+
+```js
+coinController.getTokenTransferStage(function (err, txHash) {
+    if (err) {
+        console.log("Error in getTokenTransferStage", err);
+    } else {
+        console.log("Success in getTokenTransferStage", txHash);
+    }
+});
+```
+
+- Start Token Transfer
+
+```js
+var walletPrivateKey = 'd6031505b3b45dd1be7d72486dec0b7f95eee2db329fc28a1a3b3a09904a7806';
+var walletAddress = '0xccddccdebd0c15590b33b41c40f3361f764fd07c';
+coinController.startTokenTransfer(walletAddress, walletPrivateKey, function (err, txHash) {
+    if (err) {
+        console.log("Error in startTokenTransfer", err);
+    } else {
+        console.log("Success in startTokenTransfer", txHash);
+    }
+});
+```
+
+- Stop Token Transfer
+
+```js
+var walletPrivateKey = 'd6031505b3b45dd1be7d72486dec0b7f95eee2db329fc28a1a3b3a09904a7806';
+var walletAddress = '0xccddccdebd0c15590b33b41c40f3361f764fd07c';
+coinController.stopTokenTransfer(walletAddress, walletPrivateKey, function (err, txHash) {
+    if (err) {
+        console.log("Error in stopTokenTransfer", err);
+    } else {
+        console.log("Success in stopTokenTransfer", txHash);
+    }
+});
+```
+
+
+- Get Token Balance
+
+```js
+var walletAddress = '0xccddccdebd0c15590b33b41c40f3361f764fd07c';
+coinController.getTokenBalance(walletAddress, function (err, txHash) {
+    if (err) {
+        console.log("Error in getTokenBalance", err);
+    } else {
+        console.log("Success in getTokenBalance", txHash);
+    }
+});
+```
+
+
+- Token Transfer
+
+```js
+var walletPrivateKey = 'd6031505b3b45dd1be7d72486dec0b7f95eee2db329fc28a1a3b3a09904a7806';
+var walletAddress = '0xccddccdebd0c15590b33b41c40f3361f764fd07c';
+var destinationAddress = '0x8374D21710cE53a13686aabd67ee13d4b27D1933';
+var value = '0.1';
+coinController.tokenTransfer(walletAddress, walletPrivateKey, function (err, txHash) {
+    if (err) {
+        console.log("Error in tokenTransfer", err);
+    } else {
+        console.log("Success in tokenTransfer", txHash);
+    }
+});
+```
+
 [travis-image]: https://travis-ci.org/thackerronak/SmartEthereumWallet.svg
 [travis-url]: https://travis-ci.org/thackerronak/SmartEthereumWallet

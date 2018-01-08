@@ -7,6 +7,7 @@ var Web3 = require('web3');
 var web3;
 var WalletController = require('./Controller/WalletController');
 var MultiSigController = require('./Controller/MultiSigController');
+var CoinController = require('./Controller/CoinController');
 
 var SmartEthereumWallet = function SmartEthereumWallet(url) {
     var _this = this;
@@ -18,6 +19,12 @@ var SmartEthereumWallet = function SmartEthereumWallet(url) {
     this.MultiSigController = function (contractAddress) {
         MultiSigController.Init(web3,contractAddress);
         return MultiSigController;
+    };
+
+    // Initialize CoinController with given contractAddress
+    this.CoinController = function (contractAddress) {
+        CoinController.Init(web3,contractAddress);
+        return CoinController;
     };
 
 };

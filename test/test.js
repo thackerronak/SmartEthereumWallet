@@ -117,13 +117,21 @@ describe('Wallet', function () {
 var CONTRACT_ADDRESS = '0xa000d988836633ce4cd43158884660e9155230d1';
 describe('MultiSig', function () {
 
+    beforeEach(function(done){
+        setTimeout(function(){
+            // complete the async beforeEach
+            // console.log("here");
+            done();
+        }, 11500);
+    });
+
+
     var multiSigController = smartEthereumWallet.MultiSigController(CONTRACT_ADDRESS);
 
     var walletAddress = '0xCCDDCcdeBd0C15590b33b41c40F3361f764fd07c';
     var privateKeys = ['d6031505b3b45dd1be7d72486dec0b7f95eee2db329fc28a1a3b3a09904a7806', 'f521491660b385f0f6ecb0266df4648d57016b7c455e04f77378c36ab7cfaf6c'];
     var destinationAddress = '0x8374D21710cE53a13686aabd67ee13d4b27D1933';
     var value = '0.01';
-    var tokenContractAddress = '';
 
     describe('Ether Token Transfer', function () {
         it('etherTokenTransfer() must return transaction hash', function (done) {
@@ -136,4 +144,101 @@ describe('MultiSig', function () {
             });
         });
     });
+
+    var tokenContractAddress = '0x6a10063d479ba80b6f065b3634f826dd18cc69a9';
+    var destinationAddress = '0xccddccdebd0c15590b33b41c40f3361f764fd07c';
+    var value = '1';
+    describe('Ether Token Transfer', function () {
+        it('etherTokenTransfer() must return transaction hash', function (done) {
+            multiSigController.etherTokenTransfer(walletAddress, privateKeys, destinationAddress, value, tokenContractAddress, function (err, txHash) {
+                if (err) done(err);
+                else {
+                    expect(txHash).to.be.not.null;
+                    done();
+                }
+            });
+        });
+    });
+});
+
+
+var CONTRACT_ADDRESS = '0x6a10063d479ba80b6f065b3634f826dd18cc69a9';
+describe('Coin', function () {
+
+    beforeEach(function(done){
+        setTimeout(function(){
+            // complete the async beforeEach
+            // console.log("here");
+            done();
+        }, 11500);
+    });
+
+    var coinController = smartEthereumWallet.CoinController(CONTRACT_ADDRESS);
+
+    describe('Get Token Transfer Stage', function () {
+        it('getTokenTransferStage() must return value', function (done) {
+            coinController.getTokenTransferStage(function (err, value) {
+                if (err) done(err);
+                else {
+                    expect(value).to.be.not.null;
+                    done();
+                }
+            });
+        });
+    });
+
+    var walletPrivateKey = 'd6031505b3b45dd1be7d72486dec0b7f95eee2db329fc28a1a3b3a09904a7806';
+    var walletAddress = '0xccddccdebd0c15590b33b41c40f3361f764fd07c';
+
+    describe('Stop Token Transfer', function () {
+        it('stopTokenTransfer() must return transaction hash', function (done) {
+            coinController.stopTokenTransfer(walletAddress, walletPrivateKey, function (err, txHash) {
+                if (err) done(err);
+                else {
+                    expect(txHash).to.be.not.null;
+                    done();
+                }
+            });
+        });
+    });
+
+    describe('Start Token Transfer', function () {
+        it('startTokenTransfer() must return transaction hash', function (done) {
+            coinController.startTokenTransfer(walletAddress, walletPrivateKey, function (err, txHash) {
+                if (err) done(err);
+                else {
+                    expect(txHash).to.be.not.null;
+                    done();
+                }
+            });
+        });
+    });
+
+    describe('Get Token Balance', function () {
+        it('getTokenBalance() must return balance', function (done) {
+            coinController.getTokenBalance(walletAddress, function (err, balance) {
+                if (err) done(err);
+                else {
+                    expect(balance).to.be.not.null;
+                    done();
+                }
+            });
+        });
+    });
+
+
+    var destinationAddress = '0x8374D21710cE53a13686aabd67ee13d4b27D1933';
+    var value = '0.1';
+    describe('Token Transfer', function () {
+        it('tokenTransfer() must return transaction hash', function (done) {
+            coinController.tokenTransfer(walletAddress, walletPrivateKey, destinationAddress, value, function (err, txHash) {
+                if (err) done(err);
+                else {
+                    expect(txHash).to.be.not.null;
+                    done();
+                }
+            });
+        });
+    });
+
 });
