@@ -1,6 +1,6 @@
 {
   "name": "smartethereumwallet",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "Ethereum Wallet and Contract Integration ",
   "main": "index.js",
   "scripts": {
